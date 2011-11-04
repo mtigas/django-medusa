@@ -21,6 +21,8 @@ process by rendering many views at once.
 
 ## Renderer classes
 
+Renderers live in `renderers.py` in each `INSTALLED_APP`.
+
 Simply subclassing the `StaticSiteRenderer` class and defining `get_paths`
 works:
 
@@ -124,3 +126,39 @@ Example settings:
 
 Be aware that the S3 renderer will overwrite any existing files that match
 URL paths in your site.
+
+The S3 backend will force "index.html" to be the Default Root Object for each
+directory, so that "/about/" would actually be uploaded as "/about/index.html",
+but properly loaded by the browser at the "/about/" URL.
+
+**BONUS:** Additionally, the S3 renderer keeps the "Content-Type" HTTP header
+that the view returns: if "/foo/json/" returns a JSON file (application/json),
+the file will be uploaded to "/foo/json/index.html" but will be served as
+application/json in the browser -- and will be accessible from "/foo/json/".
+
+## Usage
+
+1. Install `django-medusa` into your python path (TODO: setup.py) and add
+   `django-medusa` to `INSTALLED_APPS`.
+2. Select a renderer backend (currently: disk or s3) in your settings.
+2. Create renderer classes in `renderers.py` under the apps you want to render.
+3. `django-admin.py staticsitegen`
+4. ???
+5. Profit!
+
+#### Example
+
+From the first example in the "**Renderer classes**" section, using the
+disk-based backend.
+
+    $ django-admin.py staticsitegen
+    Found renderers for 'myproject'...
+    Skipping app 'django.contrib.syndication'... (No 'renderers.py')
+    Skipping app 'django.contrib.sitemaps'... (No 'renderers.py')
+    Skipping app 'typogrify'... (No 'renderers.py')
+
+    Generating with up to 8 processes...
+    /project_dir/var/html/index.html
+    /project_dir/var/html/about/index.html
+    /project_dir/var/html/sitemap.xml
+
