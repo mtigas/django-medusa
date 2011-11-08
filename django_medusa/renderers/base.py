@@ -23,6 +23,31 @@ class BaseStaticSiteRenderer(object):
     through the Django testclient.
     """
 
+    @classmethod
+    def initialize_output(cls):
+        """
+        Things that should be done only once to the output directory BEFORE
+        rendering occurs (i.e. setting up a config file, creating dirs,
+        creating an external resource, starting an atomic deploy, etc.)
+
+        Management command calls this once before iterating over all
+        renderer instances.
+        """
+        pass
+
+    @classmethod
+    def finalize_output(cls):
+        """
+        Things that should be done only once to the output directory AFTER
+        rendering occurs (i.e. writing end of config file, setting up
+        permissions, calling an external "deploy" method, finalizing an
+        atomic deploy, etc.)
+
+        Management command calls this once after iterating over all
+        renderer instances.
+        """
+        pass
+
     def get_paths(self):
         """ Override this in a subclass to define the URLs to process """
         raise NotImplementedError
