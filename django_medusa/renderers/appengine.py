@@ -104,7 +104,7 @@ class GAEStaticSiteRenderer(BaseStaticSiteRenderer):
         app_yaml_f.write(
             "application: %s\n"\
             "version: 1\n"\
-            "runtime: python27\n"\
+            "runtime: python\n"\
             "api_version: 1\n"\
             "threadsafe: true\n\n"\
             "handlers:\n\n" % settings.GAE_APP_ID
