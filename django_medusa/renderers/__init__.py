@@ -2,10 +2,12 @@ from django.conf import settings
 import importlib
 from .base import BaseStaticSiteRenderer
 from .disk import DiskStaticSiteRenderer
+from .appengine import GAEStaticSiteRenderer
 from .s3 import S3StaticSiteRenderer
 
 __all__ = ('BaseStaticSiteRenderer', 'DiskStaticSiteRenderer',
-           'S3StaticSiteRenderer', 'StaticSiteRenderer')
+           'S3StaticSiteRenderer', 'GAEStaticSiteRenderer',
+           'StaticSiteRenderer')
 
 
 def get_cls(renderer_name):

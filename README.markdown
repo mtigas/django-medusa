@@ -12,7 +12,8 @@ existing Django site installation (not relying on highly-dynamic content) can
 be converted into a static generator which mirror's that site's output.
 
 Given a "renderer" that defines a set of URLs (see below), this uses Django's
-built-in `TestClient` to render out those views to either disk or Amazon S3.
+built-in `TestClient` to render out those views to either disk, Amazon S3,
+or to Google App Engine.
 
 At the moment, this likely does not scale to extremely large websites.
 
@@ -135,6 +136,34 @@ but properly loaded by the browser at the "/about/" URL.
 that the view returns: if "/foo/json/" returns a JSON file (application/json),
 the file will be uploaded to "/foo/json/index.html" but will be served as
 application/json in the browser -- and will be accessible from "/foo/json/".
+
+### App Engine-based site renderer
+
+Example settings:
+
+    INSTALLED_APPS = (
+        # ...
+        # ...
+        'django_medusa',
+    )
+    # ...
+    MEDUSA_RENDERER_CLASS = "django_medusa.renderers.GAEStaticSiteRenderer"
+    MEDUSA_MULTITHREAD = True
+    MEDUSA_DEPLOY_DIR = os.path.abspath(os.path.join(
+        REPO_DIR,
+        'var',
+        "html"
+    ))
+    GAE_APP_ID = ""
+
+This generates a `app.yaml` file and a `deploy` directory in your
+`MEDUSA_DEPLOY_DIR`. The `app.yaml` file contains the URL mappings to upload
+the entire site as a static files.
+
+App Engine generally follows filename extensions as the mimetype. If you have
+paths that don't have an extension and are *not* HTML files (i.e.
+"/foo/json/", "/feeds/blog/", etc.), the mimetype from the "Content-Type" HTTP
+header will be manually defined for this URL in the `app.yaml` path.
 
 ## Usage
 
