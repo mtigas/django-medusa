@@ -6,6 +6,22 @@ from .base import BaseStaticSiteRenderer
 __all__ = ('S3StaticSiteRenderer', )
 
 
+def _get_cf():
+    from boto.cloudfront import CloudFrontConnection
+    return CloudFrontConnection(
+        aws_access_key_id=settings.AWS_ACCESS_KEY,
+        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
+    )
+
+
+def _get_distribution():
+    conn = _get_cf()
+    try:
+        return conn.get_distribution_info(settings.AWS_DISTRIBUTION_ID)
+    except:
+        return None
+
+
 def _get_bucket():
     from boto.s3.connection import S3Connection
     conn = S3Connection(
@@ -53,6 +69,7 @@ def _s3_render_path(args):
         bucket.get_website_endpoint(),
         path
     )
+    return [path, outpath]
 
 
 class S3StaticSiteRenderer(BaseStaticSiteRenderer):
@@ -67,8 +84,12 @@ class S3StaticSiteRenderer(BaseStaticSiteRenderer):
       * AWS_SECRET_ACCESS_KEY
       * AWS_STORAGE_BUCKET_NAME
     """
+    @classmethod
+    def initialize_output(cls):
+        cls.all_generated_paths = []
+
     def render_path(self, path=None, view=None):
-        _s3_render_path((self.client, self.bucket, path, view))
+        return _s3_render_path((self.client, self.bucket, path, view))
 
     def generate(self):
         from boto.s3.connection import S3Connection
@@ -81,22 +102,58 @@ class S3StaticSiteRenderer(BaseStaticSiteRenderer):
         self.bucket.configure_website("index.html")
         self.server_root_path = self.bucket.get_website_endpoint()
 
+        self.generated_paths = []
         if getattr(settings, "MEDUSA_MULTITHREAD", False):
             # Upload up to ten items at once via `multiprocessing`.
             from multiprocessing import Pool
+            import itertools
 
             print "Uploading with up to 10 upload processes..."
             pool = Pool(10)
 
-            pool.map_async(
+            path_tuples = pool.map(
                 _s3_render_path,
                 ((None, None, path, None) for path in self.paths),
                 chunksize=5
             )
             pool.close()
             pool.join()
+
+            self.generated_paths = list(itertools.chain(*path_tuples))
         else:
             # Use standard, serial upload.
             self.client = Client()
             for path in self.paths:
-                self.render_path(path=path)
+                self.generated_paths += self.render_path(path=path)
+
+        type(self).all_generated_paths += self.generated_paths
+
+    @classmethod
+    def finalize_output(cls):
+        print cls.all_generated_paths
+        dist = _get_distribution()
+        if dist and dist.in_progress_invalidation_batches < 3:
+            cf = _get_cf()
+            req = cf.create_invalidation_request(
+                settings.AWS_DISTRIBUTION_ID,
+                cls.all_generated_paths
+            )
+            print req.id
+            import time
+            while True:
+                status = cf.invalidation_request_status(
+                    settings.AWS_DISTRIBUTION_ID,
+                    req.id
+                ).status
+                if status != "InProgress":
+                    print
+                    print "Complete:"
+                    if dist.config.cnames:
+                        print "Site deployed to http://%s/" % dist.config.cnames[0]
+                    else:
+                        print "Site deployed to http://%s/" % dist.domain_name
+                    print
+                    break
+                else:
+                    print "In progress..."
+                time.sleep(5)
