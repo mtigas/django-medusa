@@ -15,6 +15,9 @@ def _get_cf():
 
 
 def _get_distribution():
+    if not getattr(settings, "AWS_DISTRIBUTION_ID", None):
+        return None
+
     conn = _get_cf()
     try:
         return conn.get_distribution_info(settings.AWS_DISTRIBUTION_ID)
@@ -130,7 +133,6 @@ class S3StaticSiteRenderer(BaseStaticSiteRenderer):
 
     @classmethod
     def finalize_output(cls):
-        print cls.all_generated_paths
         dist = _get_distribution()
         if dist and dist.in_progress_invalidation_batches < 3:
             cf = _get_cf()
