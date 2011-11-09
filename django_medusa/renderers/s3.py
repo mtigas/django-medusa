@@ -102,7 +102,7 @@ class S3StaticSiteRenderer(BaseStaticSiteRenderer):
             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
         )
         self.bucket = self.conn.get_bucket(settings.AWS_STORAGE_BUCKET_NAME)
-        self.bucket.configure_website("index.html")
+        self.bucket.configure_website("index.html", "500.html")
         self.server_root_path = self.bucket.get_website_endpoint()
 
         self.generated_paths = []
