@@ -141,21 +141,21 @@ class S3StaticSiteRenderer(BaseStaticSiteRenderer):
                 cls.all_generated_paths
             )
             print req.id
-            import time
-            while True:
-                status = cf.invalidation_request_status(
-                    settings.AWS_DISTRIBUTION_ID,
-                    req.id
-                ).status
-                if status != "InProgress":
-                    print
-                    print "Complete:"
-                    if dist.config.cnames:
-                        print "Site deployed to http://%s/" % dist.config.cnames[0]
-                    else:
-                        print "Site deployed to http://%s/" % dist.domain_name
-                    print
-                    break
-                else:
-                    print "In progress..."
-                time.sleep(5)
+            #import time
+            #while True:
+            #    status = cf.invalidation_request_status(
+            #        settings.AWS_DISTRIBUTION_ID,
+            #        req.id
+            #    ).status
+            #    if status != "InProgress":
+            #        print
+            #        print "Complete:"
+            #        if dist.config.cnames:
+            #            print "Site deployed to http://%s/" % dist.config.cnames[0]
+            #        else:
+            #            print "Site deployed to http://%s/" % dist.domain_name
+            #        print
+            #        break
+            #    else:
+            #        print "In progress..."
+            #    time.sleep(5)
