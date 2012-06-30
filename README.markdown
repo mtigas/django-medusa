@@ -16,6 +16,11 @@ At the moment, this likely does not scale to extremely large websites.
 Optionally utilizes the `multiprocessing` library to speed up the rendering
 process by rendering many views at once.
 
+**For those uninterested in the nitty-gritty**, there are tutorials/examples
+in the `docs` dir:
+
+* [Tutorial 1: Hello World](https://github.com/mtigas/django-medusa/blob/master/django_medusa/docs/TUTORIAL-01.markdown)
+
 ## Renderer classes
 
 Renderers live in `renderers.py` in each `INSTALLED_APP`.
