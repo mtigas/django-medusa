@@ -1,4 +1,4 @@
-# The "hello world" of Django static websites
+# Tutorial 1: The "hello world" of Django static websites
 
 ## Preliminaries
 

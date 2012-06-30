@@ -19,7 +19,7 @@ process by rendering many views at once.
 **For those uninterested in the nitty-gritty**, there are tutorials/examples
 in the `docs` dir:
 
-* [Tutorial 1: Hello World](https://github.com/mtigas/django-medusa/blob/master/django_medusa/docs/TUTORIAL-01.markdown)
+* [Tutorial 1: Hello World](https://github.com/mtigas/django-medusa/blob/master/docs/TUTORIAL-01.markdown)
 
 ## Renderer classes
 
