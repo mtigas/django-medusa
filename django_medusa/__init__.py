@@ -1,0 +1,9 @@
+VERSION = (0, 1, 0, "dev")
+
+def get_version():
+    version = '%s.%s' % (VERSION[0], VERSION[1])
+    if VERSION[2]:
+        version = '%s.%s' % (version, VERSION[2])
+    if VERSION[3:]:
+        version = '%s.%s' % (version, VERSION[3])
+    return version

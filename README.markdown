@@ -1,7 +1,3 @@
-
-
-**EARLY WIP, PROBABLY TOTALLY BROKEN, DO NOT USE, ET CETERA, ET CETERA.**
-
 # django-medusa
 
 Allows rendering a Django-powered website into a static website a la *Jekyll*,
