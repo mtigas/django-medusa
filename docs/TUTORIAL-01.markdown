@@ -64,4 +64,7 @@ Congratulations, you've just rendered a Django website (sort of) to a static
 website.
 
 For more advanced topics (dynamically generating `renderer.get_paths` based
-on models, rendering directly to S3, etc), stay tuned for future tutorials.
+on models, rendering directly to S3, etc), see [the README][readme] and stay
+tuned for future tutorials.
+
+[readme]: https://github.com/mtigas/django-medusa/blob/master/README.markdown
