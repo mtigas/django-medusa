@@ -1,3 +1,5 @@
+import cStringIO
+
 from datetime import timedelta, datetime
 from django.conf import settings
 from django.test.client import Client
@@ -34,6 +36,20 @@ def _get_bucket():
     return conn.get_bucket(settings.AWS_STORAGE_BUCKET_NAME)
 
 
+def _upload_to_s3(key, file):
+    key.set_contents_from_file(file, policy="public-read")
+
+    cache_time = 0
+    now = datetime.now()
+    expire_dt = now + timedelta(seconds=cache_time * 1.5)
+    if cache_time != 0:
+        key.set_metadata('Cache-Control',
+            'max-age=%d, must-revalidate' % int(cache_time))
+        key.set_metadata('Expires',
+            expire_dt.strftime("%a, %d %b %Y %H:%M:%S GMT"))
+    key.make_public()
+
+
 # Unfortunately split out from the class at the moment to allow rendering with
 # several processes via `multiprocessing`.
 # TODO: re-implement within the class if possible?
@@ -55,23 +71,33 @@ def _s3_render_path(args):
     if path.endswith("/"):
         outpath += "index.html"
 
-    key = bucket.new_key(outpath)
+    key = bucket.get_key(outpath) or bucket.new_key(outpath)
     key.content_type = resp['Content-Type']
-    key.set_contents_from_string(resp.content, policy="public-read")
 
-    cache_time = 0
-    now = datetime.now()
-    expire_dt = now + timedelta(seconds=cache_time * 1.5)
-    if cache_time != 0:
-        key.set_metadata('Cache-Control',
-            'max-age=%d, must-revalidate' % int(cache_time))
-        key.set_metadata('Expires',
-            expire_dt.strftime("%a, %d %b %Y %H:%M:%S GMT"))
-    key.make_public()
-    print "http://%s%s" % (
+    temp_file = cStringIO.StringIO(resp.content)
+    md5 = key.compute_md5(temp_file)
+
+    # If key is new, there's no etag yet
+    if not key.etag:
+        _upload_to_s3(key, temp_file)
+        message = "Creating"
+
+    else:
+        etag = key.etag or ''
+        # for some weird reason, etags are quoted, strip them
+        etag = etag.strip('"').strip("'")
+        if etag not in md5:
+            _upload_to_s3(key, temp_file)
+            message = "Updating"
+        else:
+            message = "Skipping"
+
+    print "%s http://%s%s" % (
+        message,
         bucket.get_website_endpoint(),
         path
     )
+    temp_file.close()
     return [path, outpath]
 
 
