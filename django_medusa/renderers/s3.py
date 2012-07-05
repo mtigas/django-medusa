@@ -97,7 +97,7 @@ def _s3_render_path(args):
         bucket.get_website_endpoint(),
         path
     )
-
+    temp_file.close()
     return [path, outpath]
 
 
