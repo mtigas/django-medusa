@@ -33,7 +33,8 @@ def _get_bucket():
         aws_access_key_id=settings.AWS_ACCESS_KEY,
         aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
     )
-    return conn.get_bucket(settings.AWS_STORAGE_BUCKET_NAME)
+    bucket = (settings.MEDUSA_AWS_STORAGE_BUCKET_NAME if settings.MEDUSA_AWS_STORAGE_BUCKET_NAME else settings.AWS_STORAGE_BUCKET_NAME)
+    return conn.get_bucket(bucket)
 
 
 def _upload_to_s3(key, file):
@@ -127,7 +128,7 @@ class S3StaticSiteRenderer(BaseStaticSiteRenderer):
             aws_access_key_id=settings.AWS_ACCESS_KEY,
             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
         )
-        self.bucket = self.conn.get_bucket(settings.AWS_STORAGE_BUCKET_NAME)
+        self.bucket = (self.conn.get_bucket(settings.MEDUSA_AWS_STORAGE_BUCKET_NAME) if settings.MEDUSA_AWS_STORAGE_BUCKET_NAME else self.conn.get_bucket(settings.AWS_STORAGE_BUCKET_NAME))
         self.bucket.configure_website("index.html", "500.html")
         self.server_root_path = self.bucket.get_website_endpoint()
 
