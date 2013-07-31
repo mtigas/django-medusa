@@ -124,7 +124,7 @@ Example settings:
     MEDUSA_MULTITHREAD = True
     AWS_ACCESS_KEY = ""
     AWS_SECRET_ACCESS_KEY = ""
-    AWS_STORAGE_BUCKET_NAME = ""
+    MEDUSA_AWS_STORAGE_BUCKET_NAME = "" # (also accepts AWS_STORAGE_BUCKET_NAME)
 
 Be aware that the S3 renderer will overwrite any existing files that match
 URL paths in your site.
