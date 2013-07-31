@@ -4,7 +4,7 @@ install_requires = [
     'django',
 ]
 
-version = __import__('django_medusa').get_version()
+version = "0.2.0"
 
 setup(name='django-medusa',
     version=version,
