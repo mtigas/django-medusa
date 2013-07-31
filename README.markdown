@@ -169,7 +169,7 @@ header will be manually defined for this URL in the `app.yaml` path.
 ## Usage
 
 1. Install `django-medusa` into your python path (TODO: setup.py) and add
-   `django-medusa` to `INSTALLED_APPS`.
+   `django_medusa` to `INSTALLED_APPS`.
 2. Select a renderer backend (currently: disk or s3) in your settings.
 2. Create renderer classes in `renderers.py` under the apps you want to render.
 3. `django-admin.py staticsitegen`
