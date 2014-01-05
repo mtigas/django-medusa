@@ -1,3 +1,4 @@
+from __future__ import print_function
 from django.conf import settings
 from django.test.client import Client
 from .base import BaseStaticSiteRenderer
@@ -46,7 +47,7 @@ def _gae_render_path(args):
         if needs_ext:
             outpath += "index.html"
 
-        print outpath
+        print(outpath)
         with open(outpath, 'w') as f:
             f.write(resp.content)
 
@@ -82,8 +83,7 @@ class GAEStaticSiteRenderer(BaseStaticSiteRenderer):
 
     @classmethod
     def initialize_output(cls):
-        print "Initializing output directory with `app.yaml`."
-        print
+        print("Initializing output directory with `app.yaml`.")
 
         # Initialize the MEDUSA_DEPLOY_DIR with an `app.yaml` and `deploy`
         # directory which stores the static files on disk.
@@ -113,9 +113,7 @@ class GAEStaticSiteRenderer(BaseStaticSiteRenderer):
 
     @classmethod
     def finalize_output(cls):
-        print
-        print "Finalizing `app.yaml`."
-        print
+        print("Finalizing `app.yaml`.")
 
         DEPLOY_DIR = settings.MEDUSA_DEPLOY_DIR
         app_yaml = os.path.abspath(os.path.join(
@@ -158,10 +156,9 @@ class GAEStaticSiteRenderer(BaseStaticSiteRenderer):
         )
         app_yaml_f.close()
 
-        print "You should now be able to deploy this to Google App Engine"
-        print "by performing the following command:"
-        print "appcfg.py update %s" % os.path.abspath(DEPLOY_DIR)
-        print
+        print("You should now be able to deploy this to Google App Engine")
+        print("by performing the following command:")
+        print("appcfg.py update %s" % os.path.abspath(DEPLOY_DIR))
 
     def generate(self):
         DEPLOY_DIR = settings.MEDUSA_DEPLOY_DIR
@@ -171,7 +168,7 @@ class GAEStaticSiteRenderer(BaseStaticSiteRenderer):
             # Upload up to ten items at once via `multiprocessing`.
             from multiprocessing import Pool
 
-            print "Uploading with up to 10 upload processes..."
+            print("Uploading with up to 10 upload processes...")
             pool = Pool(10)
 
             handlers = pool.map(

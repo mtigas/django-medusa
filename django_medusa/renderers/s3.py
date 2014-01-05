@@ -1,5 +1,8 @@
-import cStringIO
-
+from __future__ import print_function
+try:
+    import cStringIO
+except ImportError:  # >=Python 3.
+    from io import StringIO as cStringIO
 from datetime import timedelta, datetime
 from django.conf import settings
 from django.test.client import Client
@@ -93,11 +96,11 @@ def _s3_render_path(args):
         else:
             message = "Skipping"
 
-    print "%s http://%s%s" % (
+    print("%s http://%s%s" % (
         message,
         bucket.get_website_endpoint(),
         path
-    )
+    ))
     temp_file.close()
     return [path, outpath]
 
@@ -138,7 +141,7 @@ class S3StaticSiteRenderer(BaseStaticSiteRenderer):
             from multiprocessing import Pool
             import itertools
 
-            print "Uploading with up to 10 upload processes..."
+            print("Uploading with up to 10 upload processes...")
             pool = Pool(10)
 
             path_tuples = pool.map(
@@ -167,22 +170,4 @@ class S3StaticSiteRenderer(BaseStaticSiteRenderer):
                 settings.AWS_DISTRIBUTION_ID,
                 cls.all_generated_paths
             )
-            print req.id
-            #import time
-            #while True:
-            #    status = cf.invalidation_request_status(
-            #        settings.AWS_DISTRIBUTION_ID,
-            #        req.id
-            #    ).status
-            #    if status != "InProgress":
-            #        print
-            #        print "Complete:"
-            #        if dist.config.cnames:
-            #            print "Site deployed to http://%s/" % dist.config.cnames[0]
-            #        else:
-            #            print "Site deployed to http://%s/" % dist.domain_name
-            #        print
-            #        break
-            #    else:
-            #        print "In progress..."
-            #    time.sleep(5)
+            print(req.id)
