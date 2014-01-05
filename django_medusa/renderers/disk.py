@@ -1,3 +1,4 @@
+from __future__ import print_function
 from django.conf import settings
 from django.test.client import Client
 import mimetypes
@@ -50,7 +51,7 @@ def _disk_render_path(args):
             else:
                 # Default to ".html"
                 outpath += "index.html"
-        print outpath
+        print(outpath)
         with open(outpath, 'w') as f:
             f.write(resp.content)
 
@@ -65,7 +66,7 @@ class DiskStaticSiteRenderer(BaseStaticSiteRenderer):
             # Upload up to ten items at once via `multiprocessing`.
             from multiprocessing import Pool, cpu_count
 
-            print "Generating with up to %d processes..." % cpu_count()
+            print("Generating with up to %d processes..." % cpu_count())
             pool = Pool(cpu_count())
 
             pool.map_async(
