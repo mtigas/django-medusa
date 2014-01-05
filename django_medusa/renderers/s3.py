@@ -1,6 +1,8 @@
 from __future__ import print_function
-import cStringIO
-
+try:
+    import cStringIO
+except ImportError:  # >=Python 3.
+    from io import StringIO as cStringIO
 from datetime import timedelta, datetime
 from django.conf import settings
 from django.test.client import Client
