@@ -52,7 +52,7 @@ def _disk_render_path(args):
                 # Default to ".html"
                 outpath += "index.html"
         print(outpath)
-        with open(outpath, 'w') as f:
+        with open(outpath, 'wb') as f:
             f.write(resp.content)
 
 
