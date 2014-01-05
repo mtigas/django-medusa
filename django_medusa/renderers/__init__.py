@@ -16,7 +16,7 @@ def get_cls(renderer_name):
     return getattr(mod, cls_name)
 
 
-DEFAULT_RENDERER = 'medusa.renderers.BaseStaticSiteRenderer'
+DEFAULT_RENDERER = 'django_medusa.renderers.BaseStaticSiteRenderer'
 
 # Define the default "django_medusa.renderers.StaticSiteRenderer" class as
 # whatever class we have chosen in settings (defaulting to Base which will
