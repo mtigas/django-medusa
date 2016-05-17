@@ -15,6 +15,7 @@ which are still somewhat active, as of January 2016:
   (Read about it [here](http://datadesk.latimes.com/posts/2012/03/introducing-django-bakery/).)
 * [The alsoicode/django-medusa fork](https://github.com/alsoicode/django-medusa), by [Brandon Taylor](https://github.com/alsoicode). Among other things, it's been kept up to date for newer versions of Django.
 * [django-freeze](https://github.com/fabiocaccamo/django-freeze) by [Fabio Caccamo](https://github.com/fabiocaccamo).
+* [django-staticgen](https://github.com/mishbahr/django-staticgen) by [Mishbah Razzaque](https://github.com/mishbahr).
 
 ---
 
