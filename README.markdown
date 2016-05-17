@@ -1,8 +1,26 @@
 # django-medusa
 
-Allows rendering a Django-powered website into a static website a la *Jekyll*,
+A super simple "static site generator" for Django sites. [Read more about this project here](https://mike.tig.as/blog/2012/06/30/django-medusa-rendering-django-sites-static-html/).
+
+© 2011-2014 Mike Tigas. Licensed under the [MIT License](LICENSE).
+
+---
+
+**Note**: This project is largely unmaintained since 2014 and may be broken. If you
+want to use something similar that's gotten more love lately, look at the following
+which are still somewhat active, as of January 2016:
+
+* [django-bakery](https://github.com/datadesk/django-bakery), built and maintained
+  the lovely people at the [Los Angeles Times Data Desk](http://datadesk.latimes.com/).
+  (Read about it [here](http://datadesk.latimes.com/posts/2012/03/introducing-django-bakery/).)
+* [The alsoicode/django-medusa fork](https://github.com/alsoicode/django-medusa), by [Brandon Taylor](https://github.com/alsoicode). Among other things, it's been kept up to date for newer versions of Django.
+* [django-freeze](https://github.com/fabiocaccamo/django-freeze) by [Fabio Caccamo](https://github.com/fabiocaccamo).
+
+---
+
+**django-medusa** allows rendering a Django-powered website into a static website a la *Jekyll*,
 *Movable Type*, or other static page generation CMSes or frameworks.
-**django-medusa** is designed to be as simple as possible and allow the
+It is designed to be as simple as possible and allow the
 easy(ish) conversion of existing dynamic Django-powered websites -- nearly any
 existing Django site installation (not relying on highly-dynamic content) can
 be converted into a static generator which mirror's that site's output.
@@ -11,10 +29,10 @@ Given a "renderer" that defines a set of URLs (see below), this uses Django's
 built-in `TestClient` to render out those views to either disk, Amazon S3,
 or to Google App Engine.
 
-At the moment, this likely does not scale to extremely large websites.
-
-Optionally utilizes the `multiprocessing` library to speed up the rendering
-process by rendering many views at once.
+At the moment, this likely does not scale to extremely large websites due to
+the use of the internal `TestClient`. But django-medusa optionally uses the
+`multiprocessing` library to speed up the rendering process by rendering many
+views in parallel.
 
 **For those uninterested in the nitty-gritty**, there are tutorials/examples
 in the `docs` dir:
@@ -191,4 +209,3 @@ disk-based backend.
     /project_dir/var/html/index.html
     /project_dir/var/html/about/index.html
     /project_dir/var/html/sitemap.xml
-
